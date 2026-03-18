@@ -18,27 +18,16 @@ Multi-pair liquidity provision bot designed for Nado's CLOB perpetual markets. P
 - **Risk management** — 5 risk modes from normal to kill switch
 
 ## Architecture
-Market Data (Nado WS + Binance/Bybit)
-│
-▼
-┌─────────────────┐
-│  Pair Scanner   │ ← selects top pairs by net spread
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│  Quote Engine   │ ← fair price + skew + regime + funding
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│  Risk Manager   │ ← 5 modes, position limits, kill switch
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│  Nado SDK       │ ← post-only limit orders via API
-└─────────────────┘
+
+**Market Data Layer** → Nado WebSocket + Binance/Bybit index pricing
+
+**Pair Scanner** → scans all pairs, selects top by net spread every 30 min
+
+**Quote Engine** → calculates fair price + inventory skew + regime bias + funding signal
+
+**Risk Manager** → 5 risk modes (Normal → Caution → One-Sided → Reduce Only → Kill Switch)
+
+**Execution** → post-only limit orders via Nado Python SDK
 
 ## Stack
 
